@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-dark-gray font-body;
+    cursor: auto;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-bold;
+  }
+}
+
+* {
+  cursor: auto !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-feature-settings: "ss01" 1;
+  }
+}
+
+/* Subtle gradient backgrounds */
+.gradient-blob {
+  background: radial-gradient(circle at 30% 40%, rgba(255, 107, 157, 0.08) 0%, transparent 50%);
+}
+
+.gradient-blob-2 {
+  background: radial-gradient(circle at 70% 60%, rgba(255, 195, 217, 0.06) 0%, transparent 50%);
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFF8FB;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FFC5D9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF6B9D;
+}
+
+/* Reduce motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* Fix letter overflow */
+div > span {
+  overflow: visible;
+}
