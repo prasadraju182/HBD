@@ -2,82 +2,64 @@ export const memories = [
   {
     id: 1,
     image: 'https://res.cloudinary.com/ldqerzvi/image/upload/v1786294278/1.jpg',
-    title: 'Evidence #01',
-    caption: 'The chaos begins.',
-    animation: 'fade'
+    title: 'Where it all begins',
+    caption: 'One of those moments worth keeping.',
+    date: 'A special day'
   },
   {
     id: 2,
     image: 'https://res.cloudinary.com/ldqerzvi/image/upload/v1786294276/4.jpg',
-    title: 'Evidence #02',
-    caption: 'No explanation available.',
-    animation: 'slideLeft'
+    title: 'Unplanned moments',
+    caption: 'The best memories are often unplanned.',
+    date: 'A random memory'
   },
   {
     id: 3,
     image: 'https://res.cloudinary.com/ldqerzvi/image/upload/v1786294276/3.jpg',
-    title: 'Evidence #03',
-    caption: 'This seemed like a good idea.',
-    animation: 'blurSharp'
+    title: 'The laughter',
+    caption: 'A picture that brings back a thousand thoughts.',
+    date: 'One of our days'
   },
-  /*{
-    id: 4,
-    image: '/photos/4.jpeg',
-    title: 'Evidence #04',
-    caption: 'We should probably delete this one.',
-    animation: 'clipPath'
-  },*/
   {
     id: 4,
     image: 'https://res.cloudinary.com/ldqerzvi/image/upload/v1786294277/5.jpg',
-    title: 'Evidence #04',
-    caption: 'The evidence continues.',
-    animation: 'card3d'
+    title: 'Good times',
+    caption: 'A little moment from our journey.',
+    date: 'A special memory'
   },
   {
     id: 5,
     image: 'https://res.cloudinary.com/ldqerzvi/image/upload/v1786294274/7.jpg',
-    title: 'Evidence #05',
-    caption: 'Still going strong.',
-    animation: 'zoomOut'
+    title: 'The little things',
+    caption: 'The small things become the biggest memories.',
+    date: 'Unforgettable'
   },
   {
     id: 6,
     image: 'https://res.cloudinary.com/ldqerzvi/image/upload/v1786294275/8.jpg',
-    title: 'Evidence #06',
-    caption: 'The memories keep coming.',
-    animation: 'slideUp'
+    title: 'Another chapter',
+    caption: 'One more memory for the collection.',
+    date: 'Along the way'
   },
   {
     id: 7,
     image: 'https://res.cloudinary.com/ldqerzvi/image/upload/v1786294276/2.jpg',
-    title: 'Evidence #07',
-    caption: 'Peak friendship moments.',
-    animation: 'stacked'
+    title: 'The fun days',
+    caption: 'Some moments never get old.',
+    date: 'A fun day'
   },
   {
     id: 8,
     image: 'https://res.cloudinary.com/ldqerzvi/image/upload/v1786294276/6.jpg',
-    title: 'Evidence #08',
-    caption: 'Making memories together.',
-    animation: 'parallax'
+    title: 'Together',
+    caption: 'Another frame from our story.',
+    date: 'A good memory'
   },
   {
     id: 9,
     image: 'https://res.cloudinary.com/ldqerzvi/image/upload/v1786294276/10.jpg',
-    title: 'Evidence #09',
-    caption: 'And the adventure continues...',
-    animation: 'cinematic'
+    title: 'To more memories',
+    caption: 'The story is still being written.',
+    date: 'To be continued'
   }
-]
-
-export const chaosMessages = [
-  'WHY DID YOU DO THAT 😭',
-  'CHAOS ACTIVATED',
-  'THIS WAS NOT IN THE PLAN',
-  'JYOTHIKA.exe HAS STOPPED RESPONDING',
-  '73% MORE CHAOS',
-  'NO REFUNDS.',
-  'ERROR: TOO MUCH FUN',
-  'SYSTEM OVERLOAD'
 ]

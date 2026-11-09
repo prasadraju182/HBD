@@ -1,77 +1,194 @@
-import { motion } from 'framer-motion'
-import { useInView } from '../hooks/useInView'
+
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { memories } from '../data/memories'
+import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export default function EvidenceWall() {
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 })
+  const [selected, setSelected] = useState(null)
 
-  // Use first 6 photos for the collage
-  const collagePhotos = memories.slice(0, 6)
+  const close = () => setSelected(null)
 
-  // Asymmetric grid layout
-  const getGridClass = (index) => {
-    const classes = [
-      'md:col-span-2 md:row-span-2', // Large
-      'md:col-span-1', // Medium
-      'md:col-span-1 md:row-span-2', // Tall
-      'md:col-span-2', // Wide
-      'md:col-span-1', // Medium
-      'md:col-span-2 md:row-span-1' // Wide
-    ]
-    return classes[index] || ''
+  const previous = () => {
+    setSelected((current) =>
+      current === 0 ? memories.length - 1 : current - 1
+    )
   }
 
-  const getRotation = (index) => {
-    const rotations = [-2, 3, -1, 2, -3, 1]
-    return rotations[index] || 0
+  const next = () => {
+    setSelected((current) =>
+      current === memories.length - 1 ? 0 : current + 1
+    )
   }
+
+  useEffect(() => {
+    if (selected === null) return
+
+    const handleKey = (event) => {
+      if (event.key === 'Escape') close()
+      if (event.key === 'ArrowLeft') previous()
+      if (event.key === 'ArrowRight') next()
+    }
+
+    window.addEventListener('keydown', handleKey)
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      window.removeEventListener('keydown', handleKey)
+      document.body.style.overflow = ''
+    }
+  }, [selected])
 
   return (
-    <section className="py-20 md:py-32 px-4 md:px-8 bg-white relative">
-      <div className="max-w-6xl mx-auto" ref={ref}>
-        {/* Header */}
-        <div className="text-center mb-16 md:mb-20">
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-dark-gray mb-3">
-            THE EVIDENCE WALL
-          </h2>
-          <p className="text-lg text-mid-pink font-light">
-            A curated collection of memories 📸
+    <section
+      id="gallery"
+      className="bg-[#101010] py-28 px-5 md:px-10"
+    >
+      <div className="max-w-7xl mx-auto">
+
+        <motion.div
+          className="text-center mb-20"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <p className="text-amber-200 text-xs tracking-[0.5em] uppercase mb-5">
+            Chapter 02 · Captured moments
           </p>
-        </div>
 
-        {/* Asymmetric Grid Collage */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[300px]">
-          {collagePhotos.map((photo, index) => (
-            <motion.div
-              key={photo.id}
-              className={`${getGridClass(index)} rounded-xl overflow-hidden shadow-soft cursor-pointer group relative`}
-              initial={{ opacity: 0, scale: 0.9, rotate: 0 }}
-              animate={inView ? { opacity: 1, scale: 1, rotate: getRotation(index) } : {}}
-              transition={{ delay: index * 0.15, duration: 0.6 }}
-              whileHover={{ scale: 1.02, rotate: 0 }}
+          <h2 className="font-serif text-4xl md:text-6xl">
+            Frames of <span className="italic text-amber-200">friendship.</span>
+          </h2>
+
+          <p className="text-white/40 mt-5">
+            Click a photograph. Revisit a moment.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+          {memories.map((memory, index) => (
+            <motion.button
+              type="button"
+              key={memory.id}
+              onClick={() => setSelected(index)}
+              className="group text-left outline-none"
+              initial={{ opacity: 0, y: 60, rotateX: 12 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{
+                duration: 0.8,
+                delay: (index % 3) * 0.12
+              }}
+              whileHover={{ y: -10, scale: 1.015 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <img
-                src={photo.image}
-                alt={photo.title}
-                className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                onError={(e) => {
-                  e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"%3E%3Crect fill="%23FFE8F1" width="400" height="400"/%3E%3Ctext x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%23FF6B9D" font-size="20" font-weight="bold"%3E📸%3C/text%3E%3C/svg%3E'
-                }}
-              />
+              <div className="relative aspect-[4/5] overflow-hidden bg-[#242424]">
+                <motion.img
+                  src={memory.image}
+                  alt={memory.title}
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                  whileHover={{ scale: 1.12 }}
+                  transition={{ duration: 1.1, ease: 'easeOut' }}
+                />
 
-              {/* Overlay */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-dark-gray/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4"
-              >
-                <div className="text-white">
-                  <p className="text-sm font-display font-semibold">{photo.title}</p>
-                  <p className="text-xs font-light">{photo.caption}</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-90" />
+
+                <div className="absolute inset-0 border border-white/0 group-hover:border-amber-200/50 transition-all duration-500" />
+
+                <div className="absolute top-5 left-5">
+                  <span className="text-[10px] tracking-[0.3em] uppercase text-amber-200">
+                    Memory {String(memory.id).padStart(2, '0')}
+                  </span>
                 </div>
-              </motion.div>
-            </motion.div>
+
+                <div className="absolute bottom-0 left-0 p-7">
+                  <p className="font-serif text-2xl text-white">
+                    {memory.title}
+                  </p>
+                  <p className="text-white/60 text-sm mt-2">
+                    {memory.caption}
+                  </p>
+                  <p className="text-amber-200 text-[10px] uppercase tracking-[0.25em] mt-5 opacity-0 group-hover:opacity-100 transition duration-500">
+                    View memory ↗
+                  </p>
+                </div>
+              </div>
+            </motion.button>
           ))}
         </div>
       </div>
+
+      {/* Cinematic photo viewer */}
+      <AnimatePresence>
+        {selected !== null && (
+          <motion.div
+            className="fixed inset-0 z-[120] bg-black/95 backdrop-blur-xl flex items-center justify-center p-5 md:p-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={close}
+          >
+            <motion.button
+              onClick={close}
+              className="absolute top-6 right-6 text-white/70 hover:text-amber-200 z-20"
+              aria-label="Close photo"
+            >
+              <X size={30} />
+            </motion.button>
+
+            <motion.button
+              onClick={(event) => {
+                event.stopPropagation()
+                previous()
+              }}
+              className="absolute left-3 md:left-8 text-white/70 hover:text-amber-200 z-20"
+              aria-label="Previous photo"
+            >
+              <ChevronLeft size={36} />
+            </motion.button>
+
+            <motion.div
+              key={selected}
+              className="max-w-5xl w-full text-center"
+              initial={{ opacity: 0, scale: 0.92, y: 25 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.5 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <img
+                src={memories[selected].image}
+                alt={memories[selected].title}
+                className="max-h-[72vh] w-auto max-w-full mx-auto object-contain shadow-2xl"
+              />
+
+              <p className="text-amber-200 text-xs tracking-[0.4em] uppercase mt-8">
+                Memory {String(memories[selected].id).padStart(2, '0')}
+              </p>
+
+              <h3 className="font-serif text-3xl md:text-4xl mt-3">
+                {memories[selected].title}
+              </h3>
+
+              <p className="text-white/50 mt-3">
+                {memories[selected].caption}
+              </p>
+            </motion.div>
+
+            <motion.button
+              onClick={(event) => {
+                event.stopPropagation()
+                next()
+              }}
+              className="absolute right-3 md:right-8 text-white/70 hover:text-amber-200 z-20"
+              aria-label="Next photo"
+            >
+              <ChevronRight size={36} />
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

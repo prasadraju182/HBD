@@ -1,62 +1,57 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
-import ChaosButton from './ChaosButton'
+import { motion } from 'framer-motion'
+
+const moments = [
+  'The conversations that never seem to end.',
+  'Laughing at things nobody else understands.',
+  'The random plans that somehow become memories.',
+  'The silly arguments and instant forgiveness.',
+  'The moments that make absolutely no sense to anyone else.'
+]
 
 export default function ChaosSection() {
   return (
-    <section className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-b from-soft-pink to-cream relative overflow-hidden">
-      {/* Floating decorative elements */}
-      {[...Array(3)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-6xl opacity-10"
-          animate={{ y: [0, -30, 0], rotate: 360 }}
-          transition={{ duration: 6 + i * 2, repeat: Infinity }}
-          style={{
-            left: `${20 + i * 30}%`,
-            top: '50%'
-          }}
-        >
-          🎉
-        </motion.div>
-      ))}
-
-      <div className="max-w-2xl mx-auto text-center relative z-10">
-        {/* Announcement Section */}
-        <motion.div
-          className="mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+    <section
+      id="moments"
+      className="py-28 md:py-40 px-6 bg-[#191919]"
+    >
+      <div className="max-w-4xl mx-auto text-center">
+        <motion.p
+          className="text-amber-200 text-xs tracking-[0.5em] uppercase mb-8"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="text-sm md:text-base font-display font-semibold text-mid-pink mb-4 tracking-widest">
-            IMPORTANT ANNOUNCEMENT
-          </p>
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-dark-gray mb-6">
-            JYOTHIKA HAS BEEN OFFICIALLY<br />
-            ANNOYING PEOPLE FOR ANOTHER YEAR.
-          </h2>
-          <p className="text-2xl text-magenta font-light">
-            Honestly impressive. 😂
-          </p>
-        </motion.div>
+          Chapter 03 · The little things
+        </motion.p>
 
-        {/* Floating stickers */}
-        <div className="flex justify-center gap-4 mb-12 text-4xl flex-wrap">
-          <motion.span animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-            🎀
-          </motion.span>
-          <motion.span animate={{ y: [0, -10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-            ✨
-          </motion.span>
-          <motion.span animate={{ rotate: [0, -10, 10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-            💕
-          </motion.span>
+        <motion.h2
+          className="font-serif text-4xl md:text-6xl mb-16"
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          It's always the <span className="italic text-amber-200">little things.</span>
+        </motion.h2>
+
+        <div className="space-y-5 text-left">
+          {moments.map((moment, index) => (
+            <motion.div
+              key={index}
+              className="border-b border-white/10 py-6 flex gap-6 items-start"
+              initial={{ opacity: 0, x: -25 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <span className="text-amber-200 font-serif text-xl">
+                0{index + 1}
+              </span>
+              <p className="text-white/70 text-lg md:text-xl font-serif">
+                {moment}
+              </p>
+            </motion.div>
+          ))}
         </div>
-
-        {/* Chaos Button */}
-        <ChaosButton />
       </div>
     </section>
   )
