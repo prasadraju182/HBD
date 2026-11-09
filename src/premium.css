@@ -1,0 +1,126 @@
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  margin: 0;
+  background: #0b0b0c;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #e7c990;
+  color: #111;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0b0c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #806743;
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d7b77c;
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 640px) {
+  html {
+    scroll-padding-top: 70px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Premium memory scrapbook */
+
+.polaroid-card {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.film-frame {
+  box-shadow:
+    0 0 0 1px rgba(224, 190, 130, 0.06),
+    0 25px 80px rgba(0, 0, 0, 0.35);
+}
+
+/* Music player sliders */
+
+.music-range {
+  height: 4px;
+  accent-color: #e7c990;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+/* Mobile touch targets */
+
+@media (max-width: 640px) {
+  button {
+    touch-action: manipulation;
+  }
+
+  .polaroid-card {
+    will-change: auto;
+  }
+
+  .film-frame {
+    padding: 10px;
+  }
+
+  img {
+    max-width: 100%;
+  }
+}
+
+/* Tablet */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .polaroid-card {
+    transform: none;
+  }
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

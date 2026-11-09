@@ -1,191 +1,229 @@
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import {
+  ChevronLeft,
+  ChevronRight,
+  X,
+  Maximize2
+} from 'lucide-react'
+
 import { memories } from '../data/memories'
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export default function EvidenceWall() {
   const [selected, setSelected] = useState(null)
+  const touchStartX = useRef(null)
 
-  const close = () => setSelected(null)
+  const activePhoto =
+    selected === null ? null : memories[selected]
 
   const previous = () => {
-    setSelected((current) =>
-      current === 0 ? memories.length - 1 : current - 1
+    setSelected(index =>
+      index === null
+        ? null
+        : (index - 1 + memories.length) % memories.length
     )
   }
 
   const next = () => {
-    setSelected((current) =>
-      current === memories.length - 1 ? 0 : current + 1
+    setSelected(index =>
+      index === null
+        ? null
+        : (index + 1) % memories.length
     )
   }
 
   useEffect(() => {
     if (selected === null) return
 
-    const handleKey = (event) => {
-      if (event.key === 'Escape') close()
+    const onKeyDown = event => {
+      if (event.key === 'Escape') setSelected(null)
       if (event.key === 'ArrowLeft') previous()
       if (event.key === 'ArrowRight') next()
     }
 
-    window.addEventListener('keydown', handleKey)
+    window.addEventListener('keydown', onKeyDown)
     document.body.style.overflow = 'hidden'
 
     return () => {
-      window.removeEventListener('keydown', handleKey)
+      window.removeEventListener('keydown', onKeyDown)
       document.body.style.overflow = ''
     }
   }, [selected])
 
+  const onTouchStart = event => {
+    touchStartX.current = event.touches[0].clientX
+  }
+
+  const onTouchEnd = event => {
+    if (touchStartX.current === null) return
+
+    const delta =
+      event.changedTouches[0].clientX - touchStartX.current
+
+    if (Math.abs(delta) > 45) {
+      if (delta > 0) previous()
+      else next()
+    }
+
+    touchStartX.current = null
+  }
+
   return (
-    <section
-      id="gallery"
-      className="bg-[#101010] py-28 px-5 md:px-10"
-    >
-      <div className="max-w-7xl mx-auto">
+    <section className="relative overflow-hidden bg-[#0b0b0c] px-5 py-24 sm:px-8 md:py-32">
+
+      <div className="mx-auto max-w-7xl">
 
         <motion.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 35 }}
+          className="mb-14 text-center md:mb-20"
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.8 }}
         >
-          <p className="text-amber-200 text-xs tracking-[0.5em] uppercase mb-5">
-            Chapter 02 · Captured moments
+          <p className="mb-4 text-[9px] uppercase tracking-[0.48em] text-amber-200/65">
+            A gallery of little moments
           </p>
 
-          <h2 className="font-serif text-4xl md:text-6xl">
-            Frames of <span className="italic text-amber-200">friendship.</span>
+          <h2 className="font-serif text-4xl tracking-tight text-[#f4ecdf] sm:text-6xl">
+            The memory <span className="italic text-amber-200">collection.</span>
           </h2>
 
-          <p className="text-white/40 mt-5">
-            Click a photograph. Revisit a moment.
+          <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-white/45">
+            Every picture holds a story. Tap any frame to step back into that moment.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-          {memories.map((memory, index) => (
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+
+          {memories.map((photo, index) => (
             <motion.button
               type="button"
-              key={memory.id}
+              key={photo.id}
               onClick={() => setSelected(index)}
-              className="group text-left outline-none"
-              initial={{ opacity: 0, y: 60, rotateX: 12 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{
-                duration: 0.8,
-                delay: (index % 3) * 0.12
-              }}
-              whileHover={{ y: -10, scale: 1.015 }}
-              whileTap={{ scale: 0.98 }}
+              className={`group relative aspect-[4/5] overflow-hidden rounded-sm border border-white/10 bg-[#171615] text-left ${
+                index % 5 === 0
+                  ? 'sm:col-span-2 sm:aspect-[16/8] lg:col-span-1 lg:aspect-[4/5]'
+                  : ''
+              }`}
+              initial={{ opacity: 0, y: 30, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.12 }}
+              transition={{ duration: 0.65, delay: (index % 3) * 0.08 }}
+              whileHover={{ y: -5 }}
+              aria-label={`Open ${photo.title}`}
             >
-              <div className="relative aspect-[4/5] overflow-hidden bg-[#242424]">
-                <motion.img
-                  src={memory.image}
-                  alt={memory.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.12 }}
-                  transition={{ duration: 1.1, ease: 'easeOut' }}
-                />
+              <img
+                src={photo.image}
+                alt={photo.title || `Memory ${index + 1}`}
+                loading="lazy"
+                className="h-full w-full object-cover opacity-85 transition duration-700 group-hover:scale-105 group-hover:opacity-100"
+              />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-90" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10 opacity-80" />
 
-                <div className="absolute inset-0 border border-white/0 group-hover:border-amber-200/50 transition-all duration-500" />
-
-                <div className="absolute top-5 left-5">
-                  <span className="text-[10px] tracking-[0.3em] uppercase text-amber-200">
-                    Memory {String(memory.id).padStart(2, '0')}
-                  </span>
-                </div>
-
-                <div className="absolute bottom-0 left-0 p-7">
-                  <p className="font-serif text-2xl text-white">
-                    {memory.title}
+              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 sm:p-5">
+                <div>
+                  <p className="text-[8px] uppercase tracking-[0.3em] text-amber-200/80">
+                    Memory {String(index + 1).padStart(2, '0')}
                   </p>
-                  <p className="text-white/60 text-sm mt-2">
-                    {memory.caption}
+
+                  <p className="mt-2 font-serif text-base text-white sm:text-xl">
+                    {photo.title}
                   </p>
-                  <p className="text-amber-200 text-[10px] uppercase tracking-[0.25em] mt-5 opacity-0 group-hover:opacity-100 transition duration-500">
-                    View memory ↗
+
+                  <p className="mt-1 line-clamp-2 text-[10px] text-white/65 sm:text-xs">
+                    {photo.caption}
                   </p>
                 </div>
+
+                <span className="mb-1 hidden rounded-full border border-white/35 p-2 text-white transition group-hover:border-amber-200 group-hover:text-amber-200 sm:block">
+                  <Maximize2 size={14} />
+                </span>
               </div>
             </motion.button>
           ))}
+
         </div>
       </div>
 
-      {/* Cinematic photo viewer */}
       <AnimatePresence>
-        {selected !== null && (
+        {activePhoto && (
           <motion.div
-            className="fixed inset-0 z-[120] bg-black/95 backdrop-blur-xl flex items-center justify-center p-5 md:p-12"
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/95 p-3 backdrop-blur-xl sm:p-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={close}
+            onClick={() => setSelected(null)}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
           >
-            <motion.button
-              onClick={close}
-              className="absolute top-6 right-6 text-white/70 hover:text-amber-200 z-20"
-              aria-label="Close photo"
+            <button
+              type="button"
+              onClick={() => setSelected(null)}
+              className="absolute right-4 top-4 z-20 rounded-full border border-white/20 bg-black/40 p-3 text-white hover:text-amber-200"
+              aria-label="Close gallery"
             >
-              <X size={30} />
-            </motion.button>
+              <X size={20} />
+            </button>
 
-            <motion.button
-              onClick={(event) => {
+            <button
+              type="button"
+              onClick={event => {
                 event.stopPropagation()
                 previous()
               }}
-              className="absolute left-3 md:left-8 text-white/70 hover:text-amber-200 z-20"
+              className="absolute left-2 z-20 rounded-full border border-white/20 bg-black/40 p-3 text-white hover:text-amber-200 sm:left-6"
               aria-label="Previous photo"
             >
-              <ChevronLeft size={36} />
-            </motion.button>
+              <ChevronLeft size={22} />
+            </button>
 
             <motion.div
-              key={selected}
-              className="max-w-5xl w-full text-center"
-              initial={{ opacity: 0, scale: 0.92, y: 25 }}
+              key={activePhoto.id}
+              className="relative flex max-h-[88svh] w-full max-w-5xl flex-col items-center"
+              initial={{ opacity: 0, scale: 0.97, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.5 }}
-              onClick={(event) => event.stopPropagation()}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.25 }}
+              onClick={event => event.stopPropagation()}
             >
               <img
-                src={memories[selected].image}
-                alt={memories[selected].title}
-                className="max-h-[72vh] w-auto max-w-full mx-auto object-contain shadow-2xl"
+                src={activePhoto.image}
+                alt={activePhoto.title}
+                className="max-h-[72svh] w-auto max-w-full rounded-sm object-contain shadow-2xl"
               />
 
-              <p className="text-amber-200 text-xs tracking-[0.4em] uppercase mt-8">
-                Memory {String(memories[selected].id).padStart(2, '0')}
-              </p>
+              <div className="mt-5 text-center">
+                <p className="text-[9px] uppercase tracking-[0.35em] text-amber-200/70">
+                  {String(selected + 1).padStart(2, '0')} / {String(memories.length).padStart(2, '0')}
+                </p>
 
-              <h3 className="font-serif text-3xl md:text-4xl mt-3">
-                {memories[selected].title}
-              </h3>
+                <h3 className="mt-2 font-serif text-xl text-white sm:text-2xl">
+                  {activePhoto.title}
+                </h3>
 
-              <p className="text-white/50 mt-3">
-                {memories[selected].caption}
-              </p>
+                <p className="mt-1 text-xs text-white/55">
+                  {activePhoto.caption}
+                </p>
+
+                <p className="mt-3 text-[9px] uppercase tracking-[0.2em] text-white/30 sm:hidden">
+                  Swipe to browse
+                </p>
+              </div>
             </motion.div>
 
-            <motion.button
-              onClick={(event) => {
+            <button
+              type="button"
+              onClick={event => {
                 event.stopPropagation()
                 next()
               }}
-              className="absolute right-3 md:right-8 text-white/70 hover:text-amber-200 z-20"
+              className="absolute right-2 z-20 rounded-full border border-white/20 bg-black/40 p-3 text-white hover:text-amber-200 sm:right-6"
               aria-label="Next photo"
             >
-              <ChevronRight size={36} />
-            </motion.button>
+              <ChevronRight size={22} />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

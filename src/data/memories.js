@@ -63,3 +63,14 @@ export const memories = [
     date: 'To be continued'
   }
 ]
+
+export const chaosMessages = [
+  'WHY DID YOU DO THAT 😭',
+  'CHAOS ACTIVATED',
+  'THIS WAS NOT IN THE PLAN',
+  'JYOTHIKA.exe HAS STOPPED RESPONDING',
+  '73% MORE CHAOS',
+  'NO REFUNDS.',
+  'ERROR: TOO MUCH FUN',
+  'SYSTEM OVERLOAD',
+]

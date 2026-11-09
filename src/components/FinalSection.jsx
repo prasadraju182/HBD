@@ -1,47 +1,58 @@
+
 import { motion } from 'framer-motion'
+import { Heart, Sparkles } from 'lucide-react'
 
 export default function FinalSection() {
   return (
-    <section
-      id="letter"
-      className="min-h-screen flex items-center justify-center px-6 py-28 bg-[#101010] text-center"
-    >
+    <section className="relative flex min-h-[90svh] items-center justify-center overflow-hidden bg-[#09090a] px-6 py-28 text-center">
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(205,165,100,.12),transparent_55%)]" />
+
       <motion.div
-        className="max-w-3xl"
-        initial={{ opacity: 0, y: 40 }}
+        className="relative z-10 mx-auto max-w-3xl"
+        initial={{ opacity: 0, y: 35 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 1 }}
       >
-        <p className="text-amber-200 text-xs tracking-[0.5em] uppercase mb-10">
-          One last thing
+        <motion.div
+          animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.12, 1] }}
+          transition={{ duration: 4, repeat: Infinity }}
+          className="mb-9 flex justify-center text-amber-200"
+        >
+          <Heart size={45} strokeWidth={1} />
+        </motion.div>
+
+        <p className="mb-6 text-[9px] uppercase tracking-[0.45em] text-amber-200/70">
+          And this is not the end
         </p>
 
-        <h2 className="font-serif text-5xl md:text-7xl leading-tight mb-10">
-          Some people make
+        <h2 className="font-serif text-5xl leading-tight text-white sm:text-7xl">
+          To more memories,
           <br />
-          ordinary days
-          <br />
-          <span className="italic text-amber-200">extraordinary.</span>
+          <span className="italic text-amber-200">Jyothika.</span>
         </h2>
 
-        <div className="w-16 h-px bg-amber-200 mx-auto mb-10" />
-
-        <p className="text-white/60 text-base md:text-lg leading-9">
-          Thank you for being part of these memories.
-          For the laughter, the random conversations,
-          the unforgettable moments and everything in between.
-          No matter where life takes us, these memories
-          will always have a special place.
+        <p className="mx-auto mt-8 max-w-xl text-sm leading-8 text-white/55 sm:text-base">
+          May life bring you happiness, beautiful surprises,
+          endless laughter and countless reasons to smile.
+          Keep being yourself. The world needs your kind of chaos.
         </p>
 
-        <p className="font-serif italic text-2xl text-amber-200 mt-12">
-          Here's to all the memories we've made,
-          and all the ones still waiting for us.
+        <motion.div
+          className="mt-12 flex justify-center text-amber-200/70"
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity }}
+        >
+          <Sparkles size={25} />
+        </motion.div>
+
+        <p className="mt-10 font-serif text-xl italic text-amber-100/80">
+          Some friendships become forever memories. ❤️
         </p>
 
-        <p className="text-white/30 text-xs tracking-[0.4em] uppercase mt-20">
-          The story continues.
+        <p className="mt-8 text-[9px] uppercase tracking-[0.35em] text-white/30">
+          The end of this page · Not the story
         </p>
       </motion.div>
     </section>

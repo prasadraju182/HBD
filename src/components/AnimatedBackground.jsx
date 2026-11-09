@@ -1,98 +1,57 @@
 
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
+
+const particles = Array.from({ length: 18 }, (_, i) => ({
+  left: `${(i * 29 + 13) % 100}%`,
+  top: `${(i * 47 + 9) % 100}%`,
+  delay: (i % 7) * 0.55,
+  duration: 7 + (i % 5) * 1.5
+}))
 
 export default function AnimatedBackground() {
-  const [position, setPosition] = useState({ x: 50, y: 50 })
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const updateDevice = () => {
-      setIsMobile(window.innerWidth <= 768)
-    }
-
-    updateDevice()
-    window.addEventListener('resize', updateDevice)
-
-    return () => window.removeEventListener('resize', updateDevice)
-  }, [])
-
-  useEffect(() => {
-    if (isMobile) return
-
-    const move = (event) => {
-      setPosition({
-        x: (event.clientX / window.innerWidth) * 100,
-        y: (event.clientY / window.innerHeight) * 100
-      })
-    }
-
-    window.addEventListener('mousemove', move)
-    return () => window.removeEventListener('mousemove', move)
-  }, [isMobile])
-
-  const particles = Array.from(
-    { length: isMobile ? 10 : 28 },
-    (_, i) => ({
-      id: i,
-      left: `${(i * 37) % 100}%`,
-      duration: 8 + (i % 5),
-      delay: (i % 6) * 0.8,
-      size: 2 + (i % 3)
-    })
-  )
+  const reduceMotion = useReducedMotion()
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-
-      {!isMobile && (
-        <div
-          className="absolute inset-0 transition-all duration-300"
-          style={{
-            background: `radial-gradient(450px circle at ${position.x}% ${position.y}%, rgba(214,178,108,0.09), transparent 70%)`
-          }}
-        />
-      )}
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.018)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.018)_1px,transparent_1px)] bg-[size:72px_72px] opacity-30" />
 
       <motion.div
-        className="absolute w-80 h-80 md:w-[450px] md:h-[450px] rounded-full bg-amber-300/[0.06] blur-[100px]"
-        animate={{
-          x: [0, isMobile ? 30 : 120, 0],
-          y: [0, isMobile ? 40 : 100, 0]
-        }}
-        transition={{
-          duration: isMobile ? 30 : 22,
-          repeat: Infinity,
-          ease: 'easeInOut'
-        }}
-        style={{ top: '-10%', left: '-10%' }}
+        className="absolute -left-40 top-[12%] h-80 w-80 rounded-full bg-amber-300/[0.07] blur-[100px]"
+        animate={reduceMotion ? {} : { x: [0, 70, 0], y: [0, 45, 0] }}
+        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {particles.map((particle) => (
+      <motion.div
+        className="absolute -right-40 bottom-[8%] h-96 w-96 rounded-full bg-violet-300/[0.045] blur-[110px]"
+        animate={reduceMotion ? {} : { x: [0, -55, 0], y: [0, -45, 0] }}
+        transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {!reduceMotion && particles.map((particle, i) => (
         <motion.span
-          key={particle.id}
-          className="absolute rounded-full bg-amber-100"
+          key={i}
+          className="absolute h-[2px] w-[2px] rounded-full bg-amber-100/70"
           style={{
             left: particle.left,
-            bottom: '-20px',
-            width: particle.size,
-            height: particle.size,
-            boxShadow: '0 0 8px rgba(255,220,150,0.5)'
+            top: particle.top
           }}
           animate={{
-            y: [0, -window.innerHeight - 100],
-            opacity: [0, 0.6, 0]
+            y: [0, -22, 0],
+            opacity: [0.08, 0.55, 0.08]
           }}
           transition={{
             duration: particle.duration,
             delay: particle.delay,
             repeat: Infinity,
-            ease: 'linear'
+            ease: 'easeInOut'
           }}
         />
       ))}
 
-      {!isMobile && <div className="absolute inset-0 film-grain opacity-[0.12]" />}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(0,0,0,.48)_100%)]" />
     </div>
   )
 }
