@@ -3,6 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =====================================
+   GLOBAL STYLES
+===================================== */
+
 :root {
   color-scheme: dark;
   font-family: 'Inter', sans-serif;
@@ -34,7 +38,8 @@ body {
   background: #101010;
 }
 
-button, a {
+button,
+a {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -52,6 +57,10 @@ img {
   color: #101010;
 }
 
+/* =====================================
+   CUSTOM SCROLLBAR
+===================================== */
+
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -65,26 +74,38 @@ img {
   border-radius: 10px;
 }
 
-/* Responsive container */
+/* =====================================
+   RESPONSIVE CONTAINER
+===================================== */
+
 .container-responsive {
   width: min(100% - 32px, 1280px);
   margin-inline: auto;
 }
 
-/* Responsive headings */
+/* =====================================
+   RESPONSIVE HEADINGS
+===================================== */
+
 .hero-heading {
   font-size: clamp(2.8rem, 9vw, 8rem);
   line-height: 1.05;
 }
 
-/* Responsive gallery */
+/* =====================================
+   RESPONSIVE GALLERY
+===================================== */
+
 .memory-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
 
-/* Cinematic grain */
+/* =====================================
+   ORIGINAL FILM GRAIN
+===================================== */
+
 .film-grain {
   position: absolute;
   inset: -50%;
@@ -96,14 +117,142 @@ img {
 }
 
 @keyframes grainMove {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(-2%, 1%); }
-  50% { transform: translate(1%, -2%); }
-  75% { transform: translate(2%, 2%); }
-  100% { transform: translate(-1%, -1%); }
+  0% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(-2%, 1%);
+  }
+
+  50% {
+    transform: translate(1%, -2%);
+  }
+
+  75% {
+    transform: translate(2%, 2%);
+  }
+
+  100% {
+    transform: translate(-1%, -1%);
+  }
 }
 
-/* Tablet */
+/* =====================================
+   CINEMATIC PARTICLES
+===================================== */
+
+.cinematic-particles {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cinematic-particle {
+  position: absolute;
+  bottom: -20px;
+  border-radius: 50%;
+  background: #f5c76b;
+  box-shadow: 0 0 10px rgba(245, 199, 107, 0.8);
+  pointer-events: none;
+}
+
+/* =====================================
+   GOLDEN CURSOR GLOW
+===================================== */
+
+.cinematic-cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(211, 164, 83, 0.09),
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* =====================================
+   FLOATING HEART EFFECT
+===================================== */
+
+.cinematic-heart-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.cinematic-heart {
+  position: absolute;
+  color: #e9b65e;
+  font-size: 25px;
+  text-shadow: 0 0 15px rgba(233, 182, 94, 0.7);
+}
+
+/* =====================================
+   SCROLL REVEAL
+   IMPORTANT: CONTENT ALWAYS VISIBLE
+===================================== */
+
+.cinematic-observed {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.cinematic-observed.cinematic-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================================
+   CINEMATIC MOVIE GRAIN
+===================================== */
+
+.cinematic-film-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: film-grain-move 0.25s steps(2) infinite;
+  pointer-events: none;
+}
+
+@keyframes film-grain-move {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(2%, -1%);
+  }
+
+  50% {
+    transform: translate(-1%, 2%);
+  }
+
+  75% {
+    transform: translate(1%, 1%);
+  }
+
+  100% {
+    transform: translate(-2%, -1%);
+  }
+}
+
+/* =====================================
+   TABLET RESPONSIVENESS
+===================================== */
+
 @media (max-width: 1024px) {
   .memory-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -111,7 +260,20 @@ img {
   }
 }
 
-/* Mobile */
+/* =====================================
+   MOBILE RESPONSIVENESS
+===================================== */
+
+@media (max-width: 768px) {
+  .cinematic-cursor-glow {
+    display: none;
+  }
+
+  .cinematic-particle {
+    box-shadow: 0 0 5px rgba(245, 199, 107, 0.6);
+  }
+}
+
 @media (max-width: 640px) {
   html {
     scroll-padding-top: 65px;
@@ -132,7 +294,10 @@ img {
   }
 }
 
-/* Reduce expensive animations for reduced-motion preference */
+/* =====================================
+   ACCESSIBILITY
+===================================== */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -141,5 +306,130 @@ img {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .cinematic-observed {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cinematic-film-grain {
+    animation: none;
+  }
+}
+
+/* ==========================================
+   ULTRA CINEMATIC FRIENDSHIP EXPERIENCE
+========================================== */
+
+/* 3D photograph environment */
+.cinematic-3d-scene {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.cinematic-3d-scene > button {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* Moving cinematic grain */
+.cinematic-showcase-grain {
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.5'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: cinematic-showcase-grain 0.3s steps(2) infinite;
+}
+
+@keyframes cinematic-showcase-grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(2%, -1%); }
+  50% { transform: translate(-1%, 2%); }
+  75% { transform: translate(1%, 1%); }
+  100% { transform: translate(-2%, -1%); }
+}
+
+/* Magical doorway */
+.cinematic-door {
+  position: relative;
+  isolation: isolate;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.6s ease,
+    box-shadow 0.6s ease,
+    border-color 0.6s ease;
+}
+
+.cinematic-door::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse,
+    rgba(232, 192, 112, 0.3),
+    transparent 70%
+  );
+  opacity: 0.6;
+  filter: blur(18px);
+  animation: doorway-glow 3s ease-in-out infinite;
+}
+
+.cinematic-door::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(255, 225, 160, 0.2);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+@keyframes doorway-glow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+/* Firework particles */
+.cinematic-firework {
+  position: fixed;
+  pointer-events: none;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+
+/* Mobile performance */
+@media (max-width: 640px) {
+  .cinematic-showcase-grain {
+    opacity: 0.05;
+    animation: none;
+  }
+
+  .cinematic-3d-scene {
+    perspective: 800px;
+  }
+
+  .cinematic-door::before {
+    filter: blur(10px);
+  }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-showcase-grain,
+  .cinematic-door::before {
+    animation: none !important;
+  }
+
+  .cinematic-door {
+    transition: none;
   }
 }

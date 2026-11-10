@@ -18,14 +18,18 @@ import PolaroidWall from './components/PolaroidWall'
 import FilmReel from './components/FilmReel'
 import Celebration from './components/Celebration'
 import HiddenMemories from './components/HiddenMemories'
+import CinematicEffects from './components/CinematicEffects'
+import CinematicShowcase from './components/CinematicShowcase'
 
-// Four new features
+// New cinematic experience
+import CinematicUpgrade from './components/CinematicUpgrade'
+
+// Existing additional features
 import OurUniverse from './components/OurUniverse'
 import MemoryBook from './components/MemoryBook'
 import FriendshipQuiz from './components/FriendshipQuiz'
 import ThenNow from './components/ThenNow'
 
-// Navigation links
 const navigation = [
   ['Our Story', '#timeline'],
   ['Gallery', '#gallery'],
@@ -35,6 +39,7 @@ const navigation = [
   ['Then vs Now', '#then-now'],
   ['Moments', '#moments'],
   ['Secret Letter', '#letter'],
+  ['Movie Experience', '#cinematic-experience'],
 ]
 
 export default function App() {
@@ -42,17 +47,13 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const audioRef = useRef(null)
 
-  // Enter website and start music
   const enterWebsite = async () => {
     setEntered(true)
 
     try {
       await audioRef.current?.play()
     } catch (error) {
-      console.log(
-        'Music playback requires another interaction:',
-        error
-      )
+      console.log('Music playback requires another interaction:', error)
     }
   }
 
@@ -60,9 +61,9 @@ export default function App() {
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#0b0b0c] text-[#f5f0e8]">
-
       <AnimatedBackground />
       <CursorGlow />
+      <CinematicEffects />
 
       {/* Background music */}
       <audio
@@ -73,7 +74,6 @@ export default function App() {
       />
 
       <AnimatePresence mode="wait">
-
         {!entered ? (
           <motion.div
             key="intro"
@@ -81,7 +81,7 @@ export default function App() {
             exit={{
               opacity: 0,
               scale: 1.03,
-              filter: 'blur(12px)'
+              filter: 'blur(12px)',
             }}
             transition={{ duration: 0.9 }}
           >
@@ -93,22 +93,19 @@ export default function App() {
             className="relative z-10"
             initial={{
               opacity: 0,
-              filter: 'blur(8px)'
+              filter: 'blur(8px)',
             }}
             animate={{
               opacity: 1,
-              filter: 'blur(0px)'
+              filter: 'blur(0px)',
             }}
             transition={{ duration: 1 }}
           >
-
             <ScrollProgress />
 
-            {/* Premium navigation */}
+            {/* Navigation */}
             <header className="fixed inset-x-0 top-0 z-40 border-b border-white/[0.07] bg-[#0b0b0c]/80 px-5 py-4 backdrop-blur-2xl sm:px-8">
-
               <div className="mx-auto flex max-w-7xl items-center justify-between">
-
                 <a
                   href="#home"
                   onClick={closeMenu}
@@ -136,7 +133,7 @@ export default function App() {
                   ))}
                 </nav>
 
-                {/* Responsive menu button */}
+                {/* Mobile menu button */}
                 <button
                   type="button"
                   className="rounded-full border border-white/15 p-2 text-amber-100 transition hover:border-amber-200 xl:hidden"
@@ -144,15 +141,11 @@ export default function App() {
                   aria-label="Toggle navigation"
                   aria-expanded={menuOpen}
                 >
-                  {menuOpen ? (
-                    <X size={21} />
-                  ) : (
-                    <Menu size={21} />
-                  )}
+                  {menuOpen ? <X size={21} /> : <Menu size={21} />}
                 </button>
               </div>
 
-              {/* Mobile and tablet navigation */}
+              {/* Mobile navigation */}
               <AnimatePresence>
                 {menuOpen && (
                   <motion.nav
@@ -179,7 +172,7 @@ export default function App() {
 
             <MusicButton audioRef={audioRef} />
 
-            {/* Cinematic hero */}
+            {/* Hero */}
             <section
               id="home"
               className="relative flex min-h-[100svh] items-center justify-center px-6 pb-24 pt-28 text-center"
@@ -187,7 +180,6 @@ export default function App() {
               <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_45%,rgba(193,153,91,.16),transparent_58%)]" />
 
               <div className="mx-auto max-w-5xl">
-
                 <motion.p
                   className="mb-7 text-[9px] uppercase tracking-[0.5em] text-amber-200/80 sm:text-xs"
                   initial={{ opacity: 0, y: 15 }}
@@ -202,16 +194,16 @@ export default function App() {
                   initial={{
                     opacity: 0,
                     y: 40,
-                    filter: 'blur(12px)'
+                    filter: 'blur(12px)',
                   }}
                   animate={{
                     opacity: 1,
                     y: 0,
-                    filter: 'blur(0px)'
+                    filter: 'blur(0px)',
                   }}
                   transition={{
                     duration: 1.2,
-                    delay: 0.3
+                    delay: 0.3,
                   }}
                 >
                   The memories
@@ -223,12 +215,12 @@ export default function App() {
                       textShadow: [
                         '0 0 0 rgba(230,200,140,0)',
                         '0 0 28px rgba(230,200,140,.4)',
-                        '0 0 0 rgba(230,200,140,0)'
-                      ]
+                        '0 0 0 rgba(230,200,140,0)',
+                      ],
                     }}
                     transition={{
                       duration: 4,
-                      repeat: Infinity
+                      repeat: Infinity,
                     }}
                   >
                     we made.
@@ -260,11 +252,11 @@ export default function App() {
                 className="absolute bottom-8 text-[9px] uppercase tracking-[0.3em] text-white/30"
                 animate={{
                   y: [0, 8, 0],
-                  opacity: [0.3, 0.8, 0.3]
+                  opacity: [0.3, 0.8, 0.3],
                 }}
                 transition={{
                   duration: 2.5,
-                  repeat: Infinity
+                  repeat: Infinity,
                 }}
               >
                 Scroll to remember
@@ -281,16 +273,10 @@ export default function App() {
               <EvidenceWall />
             </div>
 
-            {/* New feature 1: Our Universe */}
+            {/* Existing features */}
             <OurUniverse />
-
-            {/* New feature 2: Memory Book */}
             <MemoryBook />
-
-            {/* New feature 3: Friendship Quiz */}
             <FriendshipQuiz />
-
-            {/* New feature 4: Then vs Now */}
             <ThenNow />
 
             {/* Existing scrapbook */}
@@ -298,6 +284,12 @@ export default function App() {
 
             {/* Existing film reel */}
             <FilmReel />
+            <CinematicShowcase />
+
+            {/* NEW: Cinematic movie experience */}
+            <div id="cinematic-experience" className="scroll-mt-24">
+              <CinematicUpgrade />
+            </div>
 
             {/* Existing friendship meter */}
             <div id="moments" className="scroll-mt-24">
@@ -315,12 +307,11 @@ export default function App() {
               <SecretLetter />
             </div>
 
-            {/* Final section */}
+            {/* Existing final section */}
             <FinalSection />
 
             {/* Footer */}
             <footer className="border-t border-white/10 px-6 py-9 text-center">
-
               <p className="font-serif text-sm italic text-amber-100/70">
                 Some moments deserve to stay forever.
               </p>
@@ -335,14 +326,10 @@ export default function App() {
               >
                 Back to top ↑
               </a>
-
             </footer>
-
           </motion.div>
         )}
-
       </AnimatePresence>
-
     </main>
   )
 }
